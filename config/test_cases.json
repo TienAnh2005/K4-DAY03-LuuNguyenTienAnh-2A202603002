@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ System Prompt, không cần gọi bất kỳ Tool nào.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "expected_behavior": "Agent nhận diện nhu cầu tra cứu, tự động phát sinh Tool Call 'academic_query' với mã SV2026001.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "appointment_booking",
+    "question": "Tôi muốn đặt lịch hẹn tư vấn học vụ với Cố vấn học tập của tôi vào 9h sáng thứ Sáu tuần này. Mã sinh viên của tôi là VIN2023001.",
+    "expected_behavior": "Agent tự động phát sinh Tool Call 'schedule_appointment' với đúng thời gian, mã sinh viên và hệ thống phân công đúng Cố vấn học tập tương ứng.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Kiểm tra giúp tôi điểm GPA kỳ vừa rồi (mã SV: VIN2023001). Nếu điểm GPA dưới 3.0, hãy tự động tìm khung giờ trống của Cố vấn học tập trong tuần tới và đặt lịch hẹn tư vấn giúp tôi.",
+    "expected_behavior": "Agent thực hiện chuỗi suy luận ReAct đa bước: Đầu tiên gọi Tool tra cứu điểm GPA của sinh viên -> Nhận kết quả và so sánh điều kiện (< 3.0) -> Nếu thỏa mãn, tiếp tục gọi Tool tra cứu lịch trống của Cố vấn -> Gọi Tool tiến hành đặt lịch hẹn.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Tra cứu giúp tôi lịch thi cuối kỳ của sinh viên có mã số VIN9999999.",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND từ Tool do mã sinh viên không tồn tại trên hệ thống của VinUni, sau đó đưa ra phản hồi xin lỗi lịch sự, yêu cầu sinh viên kiểm tra lại mã và tuyệt đối không bịa đặt dữ liệu lịch thi.",
+    "complexity": "Medium"
+  }
+]

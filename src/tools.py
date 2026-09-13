@@ -37,15 +37,64 @@ TOOLS_SCHEMA = [
     #    - advisor_name (string): Tên cố vấn học tập
     # 3. Khai báo danh sách các trường bắt buộc (required).
     # --------------------------------------------------------------------------
+
+    # Tool 2: Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni
     {
         "name": "schedule_appointment",
         "description": "Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.",
         "parameters": {
             "type": "object",
             "properties": {
-                # TODO 1.2: Khai báo các thuộc tính tham số cho Tool tại đây...
+                "student_id": {
+                    "type": "string",
+                    "description": "Mã sinh viên cần đặt lịch (ví dụ: 'SV2026001')"
+                },
+                "datetime_str": {
+                    "type": "string",
+                    "description": "Thời gian hẹn (ví dụ: '14:00 15/09/2026')"
+                },
+                "advisor_name": {
+                    "type": "string",
+                    "description": "Tên cố vấn học tập"
+                }
             },
-            "required": [] # TODO 1.2: Khai báo danh sách các trường bắt buộc tại đây...
+            "required": ["student_id", "datetime_str", "advisor_name"] 
+        }
+    },
+
+    # Tool 3: Tra cứu khung giờ trống của Cố vấn học tập
+    {
+        "name": "advisor_availability_query",
+        "description": "Tra cứu các khung giờ trống của Cố vấn học tập theo mã sinh viên và khoảng thời gian.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "student_id": {
+                    "type": "string",
+                    "description": "Mã sinh viên cần tra cứu (ví dụ: 'VIN2023001')"
+                },
+                "week_range": {
+                    "type": "string",
+                    "description": "Khoảng thời gian cần tìm lịch trống (ví dụ: 'tuần tới')"
+                }
+            },
+            "required": ["student_id", "week_range"]
+        }
+    },
+
+    # Tool 4: Tra cứu lịch thi cuối kỳ
+    {
+        "name": "exam_schedule_query",
+        "description": "Tra cứu lịch thi cuối kỳ của sinh viên VinUni bằng mã sinh viên.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "student_id": {
+                    "type": "string",
+                    "description": "Mã sinh viên cần tra cứu lịch thi (ví dụ: 'VIN2023001')"
+                }
+            },
+            "required": ["student_id"]
         }
     }
 ]
@@ -102,10 +151,44 @@ def execute_schedule_appointment(student_id: str, datetime_str: str, advisor_nam
     }, ensure_ascii=False)
 
 
+def execute_advisor_availability_query(student_id: str, week_range: str) -> str:
+    """Thực thi tra cứu khung giờ trống của Cố vấn học tập"""
+    student = MOCK_DATABASE.get(student_id.strip().upper())
+    if not student:
+        return json.dumps({
+            "status": "NOT_FOUND",
+            "message": f"Không tìm thấy dữ liệu sinh viên có mã '{student_id}'"
+        }, ensure_ascii=False)
+    return json.dumps({
+        "status": "SUCCESS",
+        "student_id": student_id,
+        "advisor": student["advisor"],
+        "week_range": week_range,
+        "available_slots": ["09:00 21/09/2026", "14:00 22/09/2026"]
+    }, ensure_ascii=False)
+
+
+def execute_exam_schedule_query(student_id: str) -> str:
+    """Thực thi tra cứu lịch thi cuối kỳ theo mã sinh viên"""
+    student = MOCK_DATABASE.get(student_id.strip().upper())
+    if not student:
+        return json.dumps({
+            "status": "NOT_FOUND",
+            "message": f"Không tìm thấy lịch thi cho sinh viên có mã '{student_id}'"
+        }, ensure_ascii=False)
+    return json.dumps({
+        "status": "SUCCESS",
+        "student_id": student_id,
+        "exam_schedule": []
+    }, ensure_ascii=False)
+
+
 # Router gọi tool thực tế
 TOOL_ROUTER = {
     "academic_query": execute_academic_query,
-    "schedule_appointment": execute_schedule_appointment
+    "schedule_appointment": execute_schedule_appointment,
+    "advisor_availability_query": execute_advisor_availability_query,
+    "exam_schedule_query": execute_exam_schedule_query
 }
 
 def dispatch_tool_call(tool_name: str, arguments: Dict[str, Any]) -> str:
