@@ -28,11 +28,33 @@ Dán 1 đoạn trích xuất log tiêu biểu từ file `docs/trace_waterfall.js
 [
   {
     "step": 1,
-    "query": "quy chế học vụ VinUni yêu cầu bao nhiêu tín chỉ?",
+    "query": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên SV2026001",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "academic_query",
+    "arguments": {
+      "student_id": "SV2026001"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "student_id": "SV2026001",
+      "data": {
+        "full_name": "Nguyễn Văn An",
+        "class": "AI-K4",
+        "gpa": 3.85,
+        "email": "an.nv@vinuni.edu.vn",
+        "status": "Đang học",
+        "advisor": "PGS.TS Nguyễn Văn A"
+      }
+    },
+    "latency_ms": 1350.1
+  },
+  {
+    "step": 2,
+    "query": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên SV2026001",
     "action_type": "FINAL_ANSWER",
     "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
-    "output": "Số lượng tín chỉ bắt buộc tại VinUni phụ thuộc vào **chương trình đào tạo và ngành học cụ thể** mà sinh viên đang theo học. Thông thường:\n\n- **Chương trình Cử nhân (Quản trị Kinh doanh, Khoa học Máy tính, v.v.):** Thường yêu cầu khoảng **120 – 130+ tín chỉ** (tùy theo từng ngành và chuyên ngành).\n- **Chương trình Kỹ sư / Bác sĩ Y khoa:** Số lượng tín chỉ sẽ cao hơn, phù hợp với khung chương trình đào tạo chuyên sâu và thời gian học tập tương ứng.\n\nChương trình học bao gồm các nhóm học phần:\n1. **Các môn Học thuật Cốt lõi & Đại cương (General Education / Core Curriculum)**\n2. **Các môn Cơ sở Ngành & Chuyên ngành (Major Core & Electives)**\n3. **Thực tập / Đồ án tốt nghiệp / Dự án thực tế (Capstone Project / Internship)**\n\n---\n👉 **Lưu ý:** Nếu bạn muốn tra cứu chi tiết hồ sơ cá nhân và số tín chỉ bạn đã tích lũy/còn thiếu, vui lòng cung cấp **Mã sinh viên** (ví dụ: `SV2026001`) để mình hỗ trợ tra cứu trực tiếp trên hệ thống nhé!",
-    "latency_ms": 7122.3
+    "output": "**Thought:** Dựa trên kết quả Observation nhận được từ công cụ `academic_query`, tôi đã có đầy đủ thông tin học vụ của sinh viên có mã `SV2026001`. Bây giờ tôi sẽ tổng hợp và trình bày rõ ràng thông tin này cho người dùng.\n\n---\n\n**Kết quả tra cứu thông tin học vụ:**\n\n* **Họ và tên:** Nguyễn Văn An\n* **Mã sinh viên:** SV2026001\n* **Lớp:** AI-K4\n* **GPA:** 3.85\n* **Email:** an.nv@vinuni.edu.vn\n* **Trạng thái học tập:** Đang học\n* **Cố vấn học tập:** PGS.TS Nguyễn Văn A",
+    "latency_ms": 1792.57
   }
 ]
 ```
